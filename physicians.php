@@ -15,6 +15,28 @@
     <?php
     include 'connect.php';
 
+    if (isset($_POST['submit'])) {
+
+        try {
+
+
+            // Create prepared statement
+            $sql = "INSERT INTO physicians (physicianname, department) VALUES (:phname, :phdep)";
+            $stmt = $conn->prepare($sql);
+
+            // Bind parameters to statement
+            $stmt->bindParam(':phname', $_REQUEST['phname']);
+            $stmt->bindParam(':phdep', $_REQUEST['phdep']);
+
+            // Execute the prepared statement
+            $stmt->execute();
+            echo "Records inserted successfully.";
+        } catch (PDOException $e) {
+            die("ERROR: Could not able to execute $sql. " . $e->getMessage());
+        }
+    }
+
+
     $sql1 = "SELECT * FROM patients";
     $stmt1 = $conn->prepare($sql1);
     $stmt1->execute();
@@ -29,6 +51,7 @@
 
     // print_r($physicians);
     ?>
+
     <!-- Header -->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <div class="container">
@@ -110,30 +133,6 @@
         </form>
     </div>
 
-
-    <?php
-    if (isset($_POST['submit'])) {
-
-        try {
-
-
-            // Create prepared statement
-            $sql = "INSERT INTO physicians (physicianname, department) VALUES (:phname, :phdep)";
-            $stmt = $conn->prepare($sql);
-
-            // Bind parameters to statement
-            $stmt->bindParam(':phname', $_REQUEST['phname']);
-            $stmt->bindParam(':phdep', $_REQUEST['phdep']);
-
-            // Execute the prepared statement
-            $stmt->execute();
-            echo "Records inserted successfully.";
-        } catch (PDOException $e) {
-            die("ERROR: Could not able to execute $sql. " . $e->getMessage());
-        }
-    }
-
-    ?>
 </body>
 
 </html>
